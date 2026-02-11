@@ -1,191 +1,51 @@
-<!-- 
- This file is for creating in input form for clean.js
- -->
-<script>
-    // @ts-check
-    function mkElt(type, attrib, inner) {
-        const elt = document.createElement(type);
+<!DOCTYPE html>
+<html lang="en">
 
-        /**
-        *
-        * @param {HTMLElement | HTMLElement[] | string | string[]} inr
-        */
-        function addInner(inr) {
-            if (inr instanceof Element) {
-                elt.appendChild(inr);
-            } else {
-                const txt = document.createTextNode(inr.toString());
-                elt.appendChild(txt);
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- This page © Copyright 2026, Lennart Borgman -->
+    <meta name="author" content="Lennart Borgman">
+    <meta name="description" content="Add responsible CSS for Google Doc 'published to web'">
+
+    <meta property="og:url" content="https://some4i.eu/mm4i/mm4i.html">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://some4i.eu/mm4i/img/mm4i.png">
+    <meta property="og:image:alt" content="Example screenshot of mm4i">
+    <meta property="og:image:width" content="404">
+    <meta property="og:image:height" content="186">
+
+
+    <!-- OGDYN -->
+    <meta property="og:title" content="mm4i (Mindmaps 4 Internet)">
+    <meta property="og:description" content="
+        Mindmaps editor in your web browser.
+        (Note: If you want to share a mindmap then use the share button inside mm4i.)
+        ">
+
+
+    <base href=".">
+
+    <style id="inputs">
+        /* inert */
+        .invalid-url {
+            #inp-url {}
+
+            #btn-submit {
+                opacity: "0.5";
+                cursor: "not-allowed";
+                color: red;
             }
         }
-        if (inner) {
-            if (Array.isArray(inner) && inner.length && typeof inner != "string") {
-                for (var i = 0; i < inner.length; i++) if (inner[i]) addInner(inner[i]);
-            } else addInner(inner);
-        } for (var x in
-            attrib) { elt.setAttribute(x, attrib[x]); } return elt;
-    }
-    document.addEventListener("DOMContentLoaded", _evt => {
-        console.log("hi, i am here now", document.body);
-        const scriptFuns = mkElt("script", undefined,
-            `
-            ${isGoogleDocsPublishedWebUrl.toString()}
+    </style>
+    <script src="./init-error.js"></script>
+    <script src="./importmaps.js"></script>
 
-        `);
-        document.body.appendChild(scriptFuns);
+</head>
 
-        const h2 = mkElt("h2", undefined, "Some header");
-        const eltInfo = mkElt("p", undefined, `Some info`);
-
-        const inp = mkElt("input", { type: "url", name: "url", required: true })
-        inp.id = "inp";
-        const lbl = mkElt("label", undefined, [
-            "The url:", inp
-        ]);
-
-        const btnSubmit = mkElt("button", { type: "submit" }, "Go");
-        btnSubmit.id = "btn-submit";
-        // btnSubmit.inert = true;
-        btnSubmit.style.opacity = "0.5";
-        btnSubmit.style.cursor = "not-allowed";
-        const divSubmit = mkElt("div", undefined, btnSubmit);
-
-        const form = mkElt("form", undefined, [
-            lbl, divSubmit
-        ]);
-        form.id = "form";
-        lbl.style = `
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        `;
-        form.style = `
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        `;
-        const eltErrors = mkElt("p");
-        eltErrors.id = "elt-errors";
-        eltErrors.style.color = "red";
-        const divContent = mkElt("div", undefined, [
-            h2,
-            eltInfo,
-            form,
-            eltErrors
-        ]);
-        document.body.appendChild(divContent);
-        // debugger;
-    });
-
-
-    /**
-     * Checks if a URL is a modern standard Google Docs "Publish to the Web" link
-     *
-     * @param {string} url - The URL to check
-     * @returns {boolean} True if it matches the strict criteria
-     */
-    function isGoogleDocsPublishedWebUrl(url) {
-        const tofUrl = typeof url;
-        if (tofUrl !== 'string') {
-            throw Error(`typeof url == "${tofUrl}"`);
-        }
-        const regex = /^https:\/\/docs\.google\.com\/document\/d\/e\/2PACX-[^\/]*\/pub$/;
-        return regex.test(url);
-    }
-    function addListeners() {
-        // debugger;
-        const form2 = document.getElementById("form");
-        if (!form2) throw Error("Did not find form2");
-
-        const inp2 = document.getElementById("inp");
-        if (!inp2) throw Error("Did not find inp2");
-
-        const eltErrors2 = document.getElementById("elt-errors");
-        if (!eltErrors2) throw Error("Did not find eltErrors2");
-
-        const btnSubmit2 = document.getElementById("btn-submit");
-        if (!btnSubmit2) throw Error("Did not find btnSubmit2");
-
-        function checkInp2() {
-            const url = inp2.value;
-            if (isGoogleDocsPublishedWebUrl(url)) {
-                eltErrors2.textContent = "";
-                // btnSubmit2.inert = false;
-                btnSubmit2.style.color = "unset";
-                btnSubmit2.style.opacity = "unset";
-                btnSubmit2.style.cursor = "unset";
-            } else {
-                eltErrors2.textContent = "url is not valid";
-                // btnSubmit2.inert = true;
-                btnSubmit2.style.color = "red";
-                btnSubmit2.style.opacity = "0.5";
-                btnSubmit2.style.cursor = "not-allowed";
-
-            }
-        }
-        const funInp2 = debounce(checkInp2, 700);
-        inp2.addEventListener("input", evt => {
-            funInp2();
-        });
-
-        form2.addEventListener("submit", evt => {
-            evt.preventDefault();
-            console.log("check submit");
-            // debugger;
-            const url = inp2.value;
-            if (isGoogleDocsPublishedWebUrl(url)) {
-                eltErrors2.textContent = "";
-                return true;
-            }
-            eltErrors2.textContent = "not valid";
-            return false;
-        });
-
-        function debounce(func, waitMS = 200) {
-            /** @type {ReturnType<typeof setTimeout> | undefined} */
-            let timeoutId;
-            /**
-             * @this {any}
-             * @param {...any} args
-             */
-            return function (...args) {
-                const context = this
-                clearTimeout(timeoutId);
-                timeoutId = setTimeout(function () {
-                    timeoutId = undefined;
-                    func.call(context, ...args)
-                }, waitMS);
-            };
-        };
-
-    }
-
-    setTimeout(() => { addListeners(); }, 1000);
-
-    // ────────────────────────────────────────────────
-    // Example usage / tests
-    // ────────────────────────────────────────────────
-
-    const tests = [
-        // True - valid clean URLs
-        "https://docs.google.com/document/d/e/2PACX-1vT...longstring.../pub",
-        "https://docs.google.com/document/d/e/2PACX-abc123DEFxyz789/pub",
-
-        // False - has query parameters
-        "https://docs.google.com/document/d/e/2PACX-.../pub?embedded=true",
-        "https://docs.google.com/document/d/e/2PACX-.../pub?start=true",
-        "https://docs.google.com/document/d/e/2PACX-.../pub?",
-
-        // False - wrong ending or format
-        "https://docs.google.com/document/d/e/2PACX-.../pub/",
-        "https://docs.google.com/document/d/e/2PACX-.../preview",
-        "https://docs.google.com/document/d/1aBcDeFgHiJkLmN/pub",          // old format (no /e/2PACX-)
-        "https://docs.google.com/spreadsheets/d/e/2PACX-.../pub",         // not document
-        "http://docs.google.com/document/d/e/2PACX-.../pub",              // not https
-        "https://docs.google.com/document/d/e/2PACX-.../pub/extra",       // extra after /pub
-        "https://example.com/document/d/e/2PACX-.../pub"
-    ];
-
-    // tests.forEach(url => { console.log(`${url}\n  → ${isGoogleDocsPublishedWebUrl(url)}`); });
-
+<script type="module">
+    console.warn("loading modPage!!!");
+    const modPage = await importFc4i("page");
+    modPage.mkPage();
 </script>
