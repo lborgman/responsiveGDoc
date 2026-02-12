@@ -1,5 +1,6 @@
 // @ts-check
-const CSS_FIXER_VERSION = "0.56";
+const CSS_FIXER_VERSION = "0.57";
+const FIXER_VERSION = ourVersion();
 consoleLog(`=============== css-fixer.js ${CSS_FIXER_VERSION}`);
 function consoleLog(...msg) {
     console.log(...msg);
@@ -237,7 +238,7 @@ export function fixHtml(html) {
         `
     <body>
     <div id="our-banner">
-      fixHtml Version: ${CSS_FIXER_VERSION}
+      fixHtml Version: ${FIXER_VERSION}
     </div>
     `
     );

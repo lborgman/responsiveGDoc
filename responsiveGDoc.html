@@ -27,12 +27,89 @@
 
     <base href=".">
 
+    <style id="style">
+        :root {
+            font-family: Roboto, Arial, sans-serif;
+        }
+
+        input[type=text] {
+            padding: 8px;
+            border-width: 1px;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 8px;
+            border-width: 1px;
+            border-radius: 4px;
+        }
+
+        #explain-info {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background: rgb(20 27 144);
+            color: white;
+            padding: 20px;
+            max-width: 42rem;
+            border-radius: 8px;
+            margin-top: 10px;
+            margin-left: 10px;
+        }
+        #elt-status {
+            display: none;
+        }
+        .invalid-url #elt-status {
+            display: unset;
+            color: var(--error);
+        }
+    </style>
+    <style id="dark-light">
+        /* Respect system dark/light preference */
+        :root {
+            color-scheme: light dark;
+            /* tells browser we support both */
+            --bg: #ffffff;
+            --text: #0f0f0f;
+            --border: #ccc;
+            --error: #c5221f;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0d1117;
+                --text: #c9d1d9;
+                --border: #30363d;
+                --error: #f85149;
+            }
+        }
+
+        html,
+        body {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        input,
+        button {
+            background: var(--bg);
+            color: var(--text);
+            border-color: var(--border);
+        }
+
+        .errors {
+            color: var(--error);
+        }
+    </style>
     <style id="inputs">
         /* inert */
         .invalid-url {
-            #inp-url {}
+            #inp-url {
+                border-color: var(--error) !important;
+            }
 
             #btn-submit {
+                display: none;
                 opacity: "0.5";
                 cursor: "not-allowed";
                 color: red;
@@ -41,6 +118,9 @@
     </style>
     <script src="./init-error.js"></script>
     <script src="./importmaps.js"></script>
+    <script>
+        function ourVersion() { return "0.0"; }
+    </script>
 
 </head>
 

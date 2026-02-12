@@ -2,21 +2,35 @@
 export async function mkPage() {
     const modFixer = await importFc4i("css-fixer");
 
-    const h2 = mkElt("h2", undefined, "Some header");
-    const eltInfo = mkElt("p", undefined, `Some info`);
+    const h2 = mkElt("h2", undefined, "Responsive Google Doc Link");
+    const divInfo = mkElt("div", undefined, [
+        mkElt("div", undefined, "why"),
+        mkElt("div", undefined, "how"),
+    ]);
+    divInfo.id = "explain-info";
+
+    const eltSummary = mkElt("summary", undefined, "What is this???");
+    const eltDetails = mkElt("details", undefined, [
+        eltSummary,
+        divInfo,
+    ]);
+    const eltInfo = mkElt("p", undefined, eltDetails);
 
     const inp = mkElt("input", { type: "text", name: "url", required: true })
     inp.id = "inp-url";
     const lbl = mkElt("label", undefined, [
-        "The url:", inp
+        "Google Doc 'Published to Web':", inp
     ]);
 
-    const btnSubmit = mkElt("button", { type: "submit" }, "Go");
+    const btnSubmit = mkElt("button", { type: "submit" }, "Show it");
     btnSubmit.id = "btn-submit";
     const divSubmit = mkElt("div", undefined, btnSubmit);
 
+    const eltStatus = mkElt("div");
+    eltStatus.id = "elt-status";
+    // eltStatus.style.color = "red";
     const form = mkElt("form", undefined, [
-        lbl, divSubmit
+        lbl, eltStatus, divSubmit
     ]);
     form.id = "form";
     form.classList.add("invalid-url");
@@ -30,14 +44,11 @@ export async function mkPage() {
             flex-direction: column;
             gap: 5px;
         `;
-    const eltErrors = mkElt("p");
-    eltErrors.id = "elt-errors";
-    eltErrors.style.color = "red";
     const divContent = mkElt("div", undefined, [
         h2,
         eltInfo,
         form,
-        eltErrors
+        // eltStatus
     ]);
 
     const funInp = debounce(checkInp, 2 * 1000);
@@ -59,27 +70,46 @@ export async function mkPage() {
     });
     async function fetchAndRedisplay(url) {
         let resp;
-        // debugger;
         try {
             resp = await fetch(url);
         } catch (err) {
             console.error(url);
             debugger;
+            throw err;
         }
-        const html = await resp.text();
-        debugger;
+        let html;
+        try {
+            html = await resp.text();
+        } catch (err) {
+            console.error(url);
+            debugger;
+            throw err;
+        }
         const betterHtml = modFixer.fixHtml(html);
-        // const parser = new DOMParser();
-        // const eltHtml = parser.parseFromString(html, "text/html");
-        // document.documentElement.remove();
-        // document.appendChild(eltHtml);
-        // debugger;
 
-        ///// https://chat.deepseek.com/a/chat/s/514a6132-6b11-4782-9a41-9f928c58c676
-        // document.open();
-        // document.write(betterHtml);
-        // document.close();
-        ///// But document.write is depreciated!
+
+        let timeoutId;
+        const afterFix = () => {
+            console.log("afterFix");
+            const idBanner = "our-banner";
+            const ourBanner = document.getElementById(idBanner);
+            console.log({ ourBanner });
+            if (!ourBanner) throw Error(`Did not find #${idBanner}`);
+            ourBanner.style.opacity = "0";
+            setTimeout(() => { ourBanner.remove(); }, 4 * 1000);
+        }
+        const observer = new MutationObserver(() => {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                observer.disconnect();
+                afterFix();
+            }, 10); // Small delay for mutations to settle
+        });
+        observer.observe(document.documentElement, {
+            childList: true,
+            subtree: true
+        });
+
         document.documentElement.innerHTML = betterHtml;
     }
 
@@ -127,7 +157,7 @@ export async function mkPage() {
         console.log("checkInp");
         const url = inp.value;
         if (url.trim().length == 0) {
-            form.classList.remove("invalid-url");
+            // form.classList.remove("invalid-url");
             inp.setCustomValidity('');
             inp.reportValidity();
             return;
@@ -139,19 +169,19 @@ export async function mkPage() {
         }
         if (isGoogleDocUrl(url)) {
             form.classList.add("invalid-url");
-            eltErrors.textContent = "url is g doc";
+            eltStatus.textContent = "url is g doc";
             inp.setCustomValidity('g doc');
             inp.reportValidity();
             return;
         }
         if (!isGoogleDocPublishedWebUrl(url)) {
-            eltErrors.textContent = "url is NOT g doc web";
+            eltStatus.textContent = "url is NOT g doc web";
             form.classList.add("invalid-url");
             inp.setCustomValidity('Not g doc');
             inp.reportValidity();
             return;
         }
-        eltErrors.textContent = "";
+        eltStatus.textContent = "";
         form.classList.remove("invalid-url");
         inp.setCustomValidity('');
         inp.reportValidity();
