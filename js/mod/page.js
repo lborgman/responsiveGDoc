@@ -87,17 +87,70 @@ export async function mkPage() {
         }
         const betterHtml = modFixer.fixHtml(html);
 
-
-        let timeoutId;
-        const afterFix = () => {
-            console.log("afterFix");
+        function fixBanner() {
             const idBanner = "our-banner";
             const ourBanner = document.getElementById(idBanner);
             console.log({ ourBanner });
             if (!ourBanner) throw Error(`Did not find #${idBanner}`);
+            // ourBanner.textContent = "this is our banner";
+            const btnShare = mkElt("button", undefined, "Share");
+            ourBanner.appendChild(btnShare);
+            btnShare.addEventListener("click", evt => {
+                evt.stopPropagation();
+                debugger;
+                const urlDoc = inp.value.trim();
+                const u = new URL(location);
+                u.searchParams.set("url", urlDoc);
+                navigator.share({
+                    title: "test share",
+                    text: "our text",
+                    url: url.href
+                });
+            })
+            return;
             ourBanner.style.opacity = "0";
             setTimeout(() => { ourBanner.remove(); }, 4 * 1000);
         }
+        let timeoutId;
+        const afterFix = () => {
+            console.log("afterFix");
+            fixBanner();
+        }
+        await showDialog();
+        async function showDialog() {
+            const divInfo = mkElt("div", undefined, "info");
+            // divInfo.style.padding = "1rem";
+            const dialog = mkElt("dialog", undefined, [
+                divInfo,
+            ]);
+            dialog.id = "the-dialog";
+            document.body.appendChild(dialog);
+            dialog.addEventListener("click", evt => {
+                evt.stopPropagation();
+                const target = evt.target;
+                const a = target === dialog;
+                debugger;
+                if (!a) return;
+                dialog.close();
+            })
+            dialog.showModal();
+            const ans = await new Promise((resolve => {
+                dialog.onclose = (event) => {
+                    console.log(
+                        `Closed with return value: %c${dialog.returnValue}`,
+                        `font-weight: bold ; color: red ;`
+                    );
+                    resolve("closed");
+                };
+                dialog.oncancel = (event) => {
+                    console.log("Modal canceled");
+                    resolve("canceled");
+                };
+            }));
+            console.log({ ans });
+            debugger;
+        }
+
         const observer = new MutationObserver(() => {
             clearTimeout(timeoutId);
             timeoutId = setTimeout(() => {
