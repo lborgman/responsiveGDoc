@@ -130,9 +130,14 @@
             padding: 1rem;
         }
 
-        dialog::backdrop {
-            backdrop-filter: blur(1px);
+        dialog#the-dialog::backdrop {
+            backdrop-filter: blur(8px);
             background-color: #99999966;
+        }
+
+        dialog#the-dialog p {
+            margin: 1rem !important;
+            font-size: 1rem !important;
         }
     </style>
     <script src="./init-error.js"></script>
