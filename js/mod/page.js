@@ -51,6 +51,13 @@ export async function mkPage() {
         // eltStatus
     ]);
 
+    // FIX-ME: DEBUG
+    setTimeout(() => {
+        inp.value =
+            "https://docs.google.com/document/d/e/2PACX-1vSXcTjJ9L34DmAK5JIt77V3moMAFFLc3U5mm9xh-Ol8ff3TjVPjioFcDOljdKwigYuc4eyMW7fyLBEA/pub";
+        checkInp();
+    }, 2000);
+
     const funInp = debounce(checkInp, 2 * 1000);
     inp.addEventListener("input", evt => {
         inp.setCustomValidity('');
@@ -341,6 +348,7 @@ async function shareByOS(title, text, url) {
         const btnCopy = mkElt("button", undefined, "Copy");
         btnCopy.addEventListener("click", evt => {
             evt.stopPropagation();
+            safeCopyToClipboard(merged);
             const eltTell = mkElt("span", undefined, "Copied");
             eltTell.style = `
                 position: absolute;
@@ -421,3 +429,30 @@ async function showDialog(eltContent) {
     console.log({ ans });
     return ans == "closed";
 }
+
+async function safeCopyToClipboard(text) {
+    try {
+        const perm = await navigator.permissions.query({ name: "clipboard-write" });
+
+        if (perm.state === "denied") {
+            throw new Error("Clipboard write permission denied. User needs to reset it in site settings.");
+        }
+
+        // Even if "prompt", writeText() usually succeeds in active tab with user gesture
+        await navigator.clipboard.writeText(text);
+        console.log("Copied successfully!");
+        return true;
+    } catch (err) {
+        console.error("Copy failed:", err);
+        // Fallback (e.g. old execCommand way or tell user to Ctrl+C)
+        return false;
+    }
+}
+
+/*
+// Call it from a button click (user gesture)
+document.getElementById("copyBtn").addEventListener("click", () => {
+    safeCopyToClipboard("Hello, clipboard!");
+});
+
+*/
