@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "checkJs": true, // ← keeps type checking active
+        "noImplicitAny": false, // ← this disables the "Parameter implicitly has an 'any' type" warnings
+        "target": "es2020", // usually good to have
+        "lib": [
+            "es2020", // ← adds Promise + async/await types
+            "dom", // ← usually good to have (for document, window, etc.)
+            "esnext" // optional: for newer features if needed
+        ]
+    },
+    "exclude": [
+        "node_modules",
+        "dist",
+        "build"
+    ]
+}

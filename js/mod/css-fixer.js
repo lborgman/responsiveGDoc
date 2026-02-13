@@ -1,5 +1,5 @@
 // @ts-check
-const CSS_FIXER_VERSION = "0.57";
+const CSS_FIXER_VERSION = "0.58";
 const FIXER_VERSION = ourVersion();
 consoleLog(`=============== css-fixer.js ${CSS_FIXER_VERSION}`);
 function consoleLog(...msg) {
@@ -200,15 +200,25 @@ export function fixHtml(html) {
 
         /* Our banner */
         :root #our-banner {
+            display: flex;
+            justify-content: space-between;
             background-color: yellowgreen !important;
             color: darkgreen !important;
             padding: 8px !important;
             position: fixed;
             left: 0;
             top: 0;
-            width: 100%;
+            width: calc(100vw - 2 * 8px - 12px);
             opacity: 1;
             transition: opacity 1s 3s;
+        }
+
+        dialog {
+            box-shadow: black 10px 10px 10px;
+        }
+        dialog::backdrop {
+            backdrop-filter: blur(2px);
+            background-color: #99999966;
         }
     </style>
     <script>
@@ -233,12 +243,20 @@ export function fixHtml(html) {
     `
     );
 
+    let oldTitle = "no title";
+    const mTitle = html.match(/<title>(.*?)<\/title>/);
+    if (mTitle) {
+        oldTitle = mTitle[1];
+        const newTitle = `view: ${oldTitle}`
+        html = html.replace(/<title>(.*?)<\/title>/, `<title>${newTitle}</title>`);
+    }
+
     consoleLog("before <body>");
     html = html.replace("<body>",
         `
     <body>
     <div id="our-banner">
-      fixHtml Version: ${FIXER_VERSION}
+      GDocs html ver: ${FIXER_VERSION}
     </div>
     `
     );
@@ -246,7 +264,7 @@ export function fixHtml(html) {
     consoleLog("before ok return");
     // res.setHeader('Content-Type', 'text/html');
     // return res.status(200).send(html);
-    return html;
+    return { html, title: oldTitle };
 
 
 

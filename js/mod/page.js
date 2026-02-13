@@ -1,4 +1,11 @@
+// @ts-check
 // throw Error("just me");
+
+// @ts-ignore
+const mkElt = window.mkElt;
+// @ts-ignore
+const importFc4i = window.importFc4i;
+
 export async function mkPage() {
     const modFixer = await importFc4i("css-fixer");
 
@@ -59,7 +66,8 @@ export async function mkPage() {
     }, 2000);
 
     const funInp = debounce(checkInp, 2 * 1000);
-    inp.addEventListener("input", evt => {
+    // @ts-ignore
+    inp.addEventListener("input", _evt => {
         inp.setCustomValidity('');
         inp.reportValidity();
         funInp();
@@ -75,6 +83,10 @@ export async function mkPage() {
         fetchAndRedisplay(url);
         return false;
     });
+    /**
+     * 
+     * @param {string} url 
+     */
     async function fetchAndRedisplay(url) {
         let resp;
         try {
@@ -92,7 +104,7 @@ export async function mkPage() {
             debugger;
             throw err;
         }
-        const betterHtml = modFixer.fixHtml(html);
+        const { html:betterHtml, title:oldTitle } = modFixer.fixHtml(html);
 
         function fixBanner() {
             const idBanner = "our-banner";
@@ -106,16 +118,16 @@ export async function mkPage() {
                 evt.stopPropagation();
                 // debugger;
                 const urlDoc = inp.value.trim();
-                const u = new URL(location);
+                const u = new URL(location.href);
                 u.searchParams.set("url", urlDoc);
                 const shareOpts = {
-                    title: "test share",
+                    title: oldTitle,
                     text: `our text, ${u.href}`,
-                    // url: u.href
+                    url: u.href
                 };
                 // if (confirm(`Share?\n\nJSON.stringify(shareOpts)`)) {
                 // navigator.share(shareOpts);
-                shareByOS("title", "our text", u.href);
+                shareByOS(oldTitle, "our text", u.href);
                 // }
             })
             return;
@@ -299,6 +311,14 @@ export async function mkPage() {
     */
 
 }
+
+/**
+ * 
+ * @param {string} title 
+ * @param {string} text 
+ * @param {string} url 
+ * @returns 
+ */
 async function shareByOS(title, text, url) {
     const ua = navigator.userAgent;
     const isWindows = /Windows NT/i.test(ua);
@@ -320,7 +340,8 @@ async function shareByOS(title, text, url) {
         }
     } catch (err) {
         // Fallback if share fails (Windows often fails)
-        await navigator.clipboard.writeText(objShare);
+        debugger;
+        // await navigator.clipboard.writeText(objShare);
     }
 
     // Android, iOS, macOS → full support
@@ -367,7 +388,7 @@ async function shareByOS(title, text, url) {
                 d.close();
             }, 4 * 1000);
         })
-        const btnCancel = mkElt("button", undefined, "Cancel");
+        const btnCancel = mkElt("button", undefined, "Close");
         btnCancel.addEventListener("click", evt => {
             evt.stopPropagation();
             const d = btnCancel.closest("dialog");
@@ -430,12 +451,17 @@ async function showDialog(eltContent) {
     return ans == "closed";
 }
 
-async function safeCopyToClipboard(text) {
+// https://support.google.com/chrome/answer/114662?hl=en
+async function safeCopyToClipboard(text, funPermissionsNeeded = undefined) {
     try {
+        // @ts-ignore
         const perm = await navigator.permissions.query({ name: "clipboard-write" });
 
         if (perm.state === "denied") {
-            throw new Error("Clipboard write permission denied. User needs to reset it in site settings.");
+            if (!funPermissionsNeeded) {
+                throw new Error("Clipboard write permission denied. User needs to reset it in site settings.");
+            }
+            funPermissionsNeeded();
         }
 
         // Even if "prompt", writeText() usually succeeds in active tab with user gesture
