@@ -104,17 +104,20 @@ export async function mkPage() {
             debugger;
             throw err;
         }
-        const { html:betterHtml, title:oldTitle } = modFixer.fixHtml(html);
+        const { html: betterHtml, title: oldTitle } = modFixer.fixHtml(html);
 
         function fixBanner() {
             const idBanner = "our-banner";
             const ourBanner = document.getElementById(idBanner);
             console.log({ ourBanner });
             if (!ourBanner) throw Error(`Did not find #${idBanner}`);
-            const btnShare = mkElt("button", undefined, "Share");
+            const btnShare = mkIconButton("share");
+            // const btnAdd = mkIconButton("add");
+            const btnAdd2 = mkIconButton("add_2");
             const spanButtons = mkElt("span", undefined, [
-                btnShare, 
-                mkIconButton("share"),
+                btnShare,
+                // btnAdd,
+                btnAdd2,
             ]);
             spanButtons.id = "our-banner-span-buttons";
 
@@ -134,11 +137,16 @@ export async function mkPage() {
                 // navigator.share(shareOpts);
                 shareByOS(oldTitle, "our text", u.href);
                 // }
-            })
+            });
+            btnAdd2.addEventListener("click", evt => {
+                alert("Not ready yet");
+            });
             return;
             function mkIconButton(iconName) {
                 const btn = mkElt("button");
-                btn.style.backgroundImage= `url(./img/${iconName}.svg)`;
+                // btn.style.maskImage= `url(./img/${iconName}.svg)`;
+                btn.style.setProperty('--icon-url', `url(./img/${iconName}.svg)`);
+                btn.classList.add("icon-button");
                 return btn;
             }
             ourBanner.style.opacity = "0";

@@ -74,7 +74,126 @@ export function fixHtml(html) {
           border-radius: 3px;
         }
 
+
+
+        body {
+            /* No font-size defined: respects user/browser choice */
+            max-width: 42rem;
+            margin: 0 auto;
+            padding: 1.5rem;
+            NOline-height: 1.6;
+            NOfont-family: system-ui, -apple-system, sans-serif;
+            NOcolor: #1a1a1a;
+            NOword-wrap: break-word;
+        }
+
+        /* Responsive Images & Tables */
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            display: block;
+            overflow-x: auto;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+
+        /* Google docs fixes */
+        html body #banners {
+            display: none !important;
+        }
+
+        NOhtml body #contents {
+            padding: unset !important;
+        }
+
+        :root .doc-content {
+            padding: unset !important;
+            background-color: unset !important;
+            color: unset !important;
+        }
+
+        :root #contents {
+            padding: unset !important;
+            background-color: unset !important;
+            color: unset !important;
+        }
+
+
+        /* Our banner */
+        :root body div#our-banner button.icon-button {
+            color: currentColor !important;
+        }
+        :root body div#our-banner {
+            display: flex;
+            justify-content: space-between;
+            background-color: yellowgreen !important;
+            color: darkgreen !important;
+            padding: 8px !important;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: calc(100vw - 2 * 8px - 12px);
+            opacity: 1;
+            transition: opacity 1s 3s;
+        }
+        :root #our-banner #our-banner-span-buttons {
+            display: flex;
+            height: 32px;
+            gap: 10px;
+        }
+        :root #our-banner #our-banner-span-buttons button {
+            outline: 1px dotted red;
+        }
+
+
+.icon-button {
+  padding: 0px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background-color: #3b82f6;
+  background-color: transparent;
+  color: currentColor;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.icon-button::before {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-color: currentColor;
+  NOmask: url('./img/share.svg') no-repeat center;
+  mask: var(--icon-url) no-repeat center;
+  mask-size: contain;
+}
+
+
+
+
+        dialog {
+            box-shadow: black 10px 10px 10px;
+        }
+        dialog::backdrop {
+            backdrop-filter: blur(2px);
+            background-color: #99999966;
+        }
+
+
         /* Dark mode styles */
+        /* //#region */
         @media (prefers-color-scheme: dark) {
             /* Adjust highlighted text for dark mode */
             /* filter as suggested by Microsoft Copilot */
@@ -136,104 +255,22 @@ export function fixHtml(html) {
                 color: #e8e8e8 !important;
             }
 
+            :root body div#our-banner {
+                background-color: darkgreen !important;
+                color: yellow !important;
+            }
+            :root body div#our-banner button {
+                color: yellowgreen !important;
+            }
+
             #footer {
                 background: #2a2a2a !important;
                 border-bottom-color: #444 !important;
                 color: #e8e8e8 !important;
             }
         }
+        /* //#endregion */
 
-
-        body {
-            /* No font-size defined: respects user/browser choice */
-            max-width: 42rem;
-            margin: 0 auto;
-            padding: 1.5rem;
-            NOline-height: 1.6;
-            NOfont-family: system-ui, -apple-system, sans-serif;
-            NOcolor: #1a1a1a;
-            NOword-wrap: break-word;
-        }
-
-        /* Responsive Images & Tables */
-        img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 4px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            display: block;
-            overflow-x: auto;
-        }
-
-        th,
-        td {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-
-
-        /* Google docs fixes */
-        html body #banners {
-            display: none !important;
-        }
-
-        NOhtml body #contents {
-            padding: unset !important;
-        }
-
-        :root .doc-content {
-            padding: unset !important;
-            background-color: unset !important;
-            color: unset !important;
-        }
-
-        :root #contents {
-            padding: unset !important;
-            background-color: unset !important;
-            color: unset !important;
-        }
-
-
-        /* Our banner */
-        :root #our-banner {
-            display: flex;
-            justify-content: space-between;
-            background-color: yellowgreen !important;
-            color: darkgreen !important;
-            padding: 8px !important;
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: calc(100vw - 2 * 8px - 12px);
-            opacity: 1;
-            transition: opacity 1s 3s;
-        }
-        :root #our-banner button {
-            aspect-ration: 1 / 1;
-        }
-        :root #our-banner #our-banner-span-buttons {
-            display: flex;
-            height: 32px;
-            gap: 10px;
-        }
-        :root #our-banner #our-banner-span-buttons button {
-            aspect-ratio: 1 / 1;
-            background-repeat: no-repeat;
-            background-size: contain;
-            outline: 1px dotted red;
-        }
-
-        dialog {
-            box-shadow: black 10px 10px 10px;
-        }
-        dialog::backdrop {
-            backdrop-filter: blur(2px);
-            background-color: #99999966;
-        }
     </style>
     <script>
         window.addEventListener('DOMContentLoaded', function () {
