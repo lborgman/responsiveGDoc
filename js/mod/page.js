@@ -111,9 +111,14 @@ export async function mkPage() {
             const ourBanner = document.getElementById(idBanner);
             console.log({ ourBanner });
             if (!ourBanner) throw Error(`Did not find #${idBanner}`);
-            // ourBanner.textContent = "this is our banner";
             const btnShare = mkElt("button", undefined, "Share");
-            ourBanner.appendChild(btnShare);
+            const spanButtons = mkElt("span", undefined, [
+                btnShare, 
+                mkIconButton("share"),
+            ]);
+            spanButtons.id = "our-banner-span-buttons";
+
+            ourBanner.appendChild(spanButtons);
             btnShare.addEventListener("click", evt => {
                 evt.stopPropagation();
                 // debugger;
@@ -131,6 +136,11 @@ export async function mkPage() {
                 // }
             })
             return;
+            function mkIconButton(iconName) {
+                const btn = mkElt("button");
+                btn.style.backgroundImage= `url(./img/${iconName}.svg)`;
+                return btn;
+            }
             ourBanner.style.opacity = "0";
             setTimeout(() => { ourBanner.remove(); }, 4 * 1000);
         }

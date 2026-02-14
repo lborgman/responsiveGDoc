@@ -212,6 +212,20 @@ export function fixHtml(html) {
             opacity: 1;
             transition: opacity 1s 3s;
         }
+        :root #our-banner button {
+            aspect-ration: 1 / 1;
+        }
+        :root #our-banner #our-banner-span-buttons {
+            display: flex;
+            height: 32px;
+            gap: 10px;
+        }
+        :root #our-banner #our-banner-span-buttons button {
+            aspect-ratio: 1 / 1;
+            background-repeat: no-repeat;
+            background-size: contain;
+            outline: 1px dotted red;
+        }
 
         dialog {
             box-shadow: black 10px 10px 10px;
