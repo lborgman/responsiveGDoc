@@ -18,32 +18,45 @@ const getOurUrl = () => initialSearchParams.get(paramUrlName);
 export async function mkPage() {
     const modFixer = await importFc4i("css-fixer");
 
-    const h2 = mkElt("h2", undefined, "Google Doc - mobile view");
+    const h2 = mkElt("h2", undefined, "Google Doc - mobile view web page");
     const eltNotGoogle = mkElt("div", undefined, `
-        This utility is not from Google!
+        This web page is not from Google!
         `);
     eltNotGoogle.id = "not-google";
     const eltWhy = mkElt("div", undefined, `
         Google Docs is a free document editor.
         You can publish a document as a (readonly) web page.
         Unfortunately that web page is hard to view on a mobile phone.
-        This little utility fixes that.
+        This web page fixes that.
         `);
-    const eltHow = mkElt("div", undefined, `
-            How is it done?
-            The web page is fetched from Google Docs
-            and given a new format.
-            Nothing is changed in Google Docs.
-            It is just the output here in your web browser that is changed.
-            `);
+    const eltHow = mkElt("div", undefined, [
+        mkElt("div", { style: "font-weight:bold;" }, "How this web page works: "),
+        mkElt("ol", undefined, [
+            mkElt("li", undefined, [
+                "Your web browser fetches ",
+                mkElt("a", {
+                    href: "https://www.youtube.com/watch?v=NSWtJqeAIV4",
+                    target: "_blank",
+                    style: "color:currentColor; font-style:italic;"
+                }, "the 'Publish to Web'-link"),
+                " from Google Docs."
+            ]),
+            mkElt("li", undefined, "The style is changed a bit before displaying it here."),
+        ]),
+        mkElt("div", undefined,
+            `
+            Nothing is changed at Google Docs.
+            It all happens here in your web browser.
+            `)
+    ]);
     const divInfo = mkElt("div", undefined, [
-        eltNotGoogle,
         eltWhy,
-        eltHow
+        eltHow,
+        eltNotGoogle,
     ]);
     divInfo.id = "explain-info";
 
-    const eltSummary = mkElt("summary", undefined, "What is this???");
+    const eltSummary = mkElt("summary", undefined, "What is this?");
     const eltDetails = mkElt("details", undefined, [
         eltSummary,
         divInfo,
@@ -53,7 +66,7 @@ export async function mkPage() {
     const inp = mkElt("input", { type: "text", name: "url", required: true })
     inp.id = "inp-url";
     const lbl = mkElt("label", undefined, [
-        "Google Doc 'Published to Web':", inp
+        "'Publish to Web'-link from your Google Doc:", inp
     ]);
 
     const btnSubmit = mkElt("button", { type: "submit" }, "Show it");
@@ -307,15 +320,15 @@ export async function mkPage() {
         }
         if (isGoogleDocUrl(url)) {
             form.classList.add("invalid-url");
-            eltStatus.textContent = "url is g doc";
-            inp.setCustomValidity('g doc');
+            eltStatus.textContent = "This is the Google Doc, not the 'Publish to Web'-link";
+            inp.setCustomValidity('');
             inp.reportValidity();
             return;
         }
         if (!isGoogleDocPublishedWebUrl(url)) {
-            eltStatus.textContent = "url is NOT g doc web";
+            eltStatus.textContent = "This link is not such a link";
             form.classList.add("invalid-url");
-            inp.setCustomValidity('Not g doc');
+            inp.setCustomValidity('');
             inp.reportValidity();
             return;
         }

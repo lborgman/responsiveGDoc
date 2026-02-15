@@ -307,7 +307,7 @@ export function fixHtml(html) {
         `
     <body>
     <div id="our-banner">
-      GDocs html ver: ${FIXER_VERSION}
+      Google Doc Mobile View (${FIXER_VERSION})
     </div>
     `
     );
