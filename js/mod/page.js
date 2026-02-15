@@ -6,13 +6,40 @@ const mkElt = window.mkElt;
 // @ts-ignore
 const importFc4i = window.importFc4i;
 
+const paramUrlName = "url";
+const initialSearchParams = (new URL(location)).searchParams;
+console.log({ initialSearchParams });
+const getOurUrl = () => initialSearchParams.get(paramUrlName);
+{
+    const s = getOurUrl();
+    console.log({ s });
+}
+
 export async function mkPage() {
     const modFixer = await importFc4i("css-fixer");
 
-    const h2 = mkElt("h2", undefined, "Responsive Google Doc Link");
+    const h2 = mkElt("h2", undefined, "Google Doc - mobile view");
+    const eltNotGoogle = mkElt("div", undefined, `
+        This utility is not from Google!
+        `);
+    eltNotGoogle.id = "not-google";
+    const eltWhy = mkElt("div", undefined, `
+        Google Docs is a free document editor.
+        You can publish a document as a (readonly) web page.
+        Unfortunately that web page is hard to view on a mobile phone.
+        This little utility fixes that.
+        `);
+    const eltHow = mkElt("div", undefined, `
+            How is it done?
+            The web page is fetched from Google Docs
+            and given a new format.
+            Nothing is changed in Google Docs.
+            It is just the output here in your web browser that is changed.
+            `);
     const divInfo = mkElt("div", undefined, [
-        mkElt("div", undefined, "why"),
-        mkElt("div", undefined, "how"),
+        eltNotGoogle,
+        eltWhy,
+        eltHow
     ]);
     divInfo.id = "explain-info";
 
@@ -58,10 +85,26 @@ export async function mkPage() {
         // eltStatus
     ]);
 
+    const realUrl = getOurUrl();
+    if (realUrl) inp.value = realUrl;
+
+    inp.setAttribute("placeholder", "Link from Google Docs 'Publish to Web'");
+    if (true) {
+        // FIX-ME: remove this after testing
+        try {
+            const testUrl = "https://docs.google.com/document/d/e/2PACX-1vSXcTjJ9L34DmAK5JIt77V3moMAFFLc3U5mm9xh-Ol8ff3TjVPjioFcDOljdKwigYuc4eyMW7fyLBEA/pub";
+            await navigator.clipboard.writeText(testUrl);
+            inp.setAttribute("placeholder", "Test url is on clipboard");
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+
     // FIX-ME: DEBUG
     setTimeout(() => {
-        inp.value =
-            "https://docs.google.com/document/d/e/2PACX-1vSXcTjJ9L34DmAK5JIt77V3moMAFFLc3U5mm9xh-Ol8ff3TjVPjioFcDOljdKwigYuc4eyMW7fyLBEA/pub";
+        // const val = getOurUrl() || testUrl
+        // inp.value = val;
         checkInp();
     }, 2000);
 
@@ -472,10 +515,13 @@ async function showDialog(eltContent) {
 // https://support.google.com/chrome/answer/114662?hl=en
 async function safeCopyToClipboard(text, funPermissionsNeeded = undefined) {
     try {
+        /// This query may fail in Firefox and Safari. That is not my problem.
         // @ts-ignore
         const perm = await navigator.permissions.query({ name: "clipboard-write" });
+        console.log({ perm });
 
         if (perm.state === "denied") {
+            debugger;
             if (!funPermissionsNeeded) {
                 throw new Error("Clipboard write permission denied. User needs to reset it in site settings.");
             }
@@ -488,6 +534,7 @@ async function safeCopyToClipboard(text, funPermissionsNeeded = undefined) {
         return true;
     } catch (err) {
         console.error("Copy failed:", err);
+        debugger;
         // Fallback (e.g. old execCommand way or tell user to Ctrl+C)
         return false;
     }
