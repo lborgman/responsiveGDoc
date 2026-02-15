@@ -191,7 +191,7 @@ export async function mkPage() {
                 };
                 // if (confirm(`Share?\n\nJSON.stringify(shareOpts)`)) {
                 // navigator.share(shareOpts);
-                shareByOS(oldTitle, "our text", u.href);
+                shareByOS(removeHTMLTagsAndEntities(oldTitle), "our text", u.href);
                 // }
             });
             btnAdd2.addEventListener("click", evt => {
@@ -560,3 +560,9 @@ document.getElementById("copyBtn").addEventListener("click", () => {
 });
 
 */
+function removeHTMLTagsAndEntities(htmlString) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(`<div>${htmlString}</div>`, 'text/html');
+    const textContent = doc.body.textContent || "";
+    return textContent.trim();
+}
