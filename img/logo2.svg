@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="none" stroke="#e3e3e3">
+    <title>Logo</title>
+    <description>Mobile in front of document</description>
+    <ellipse cx="480" cy="-480" rx="480" ry="480" fill="green"/>
+    <g id="document" transform="translate(30, -60) scale(0.9)" stroke="#e3e3e3" stroke-width="40" stroke-linecap="round">
+        <!-- Top horizontal line (280-600 to 680-600) -->
+        <line x1="280" y1="-600" x2="680" y2="-600"/>
+        <!-- Middle horizontal line (400-440 to 680-440) -->
+        <line x1="400" y1="-440" x2="680" y2="-440"/>
+        <!-- Bottom horizontal line (400-280 to 560-280) -->
+        <line x1="400" y1="-280" x2="560" y2="-280"/>
+        <!-- Document frame (rounded rectangle outline) -->
+        <rect x="200" y="-840" width="560" height="720" rx="56.5" ry="56.5" stroke-width="40" fill="none"/>
+        <!-- Circular arrow icon (simplified as arc/curve) -->
+        <!--
+        <path d="M 155 -330 Q 155 -408 217.5 -450.5 T 265 -520" stroke-width="80" fill="none"/>
+        <line x1="75" y1="-80" x2="160" y2="-80" stroke-width="40"/>
+        <line x1="240" y1="-80" x2="320" y2="-80" stroke-width="40"/>
+        -->
+    </g>
+    <g id="mobile" transform="translate(0, -30) scale(0.6)" stroke="red" stroke-width="50" stroke-linecap="round">
+        <!-- Mobile frame (rounded rectangle) -->
+        <rect x="200" y="-920" width="560" height="880" rx="56.5" ry="56.5" fill="black"/>
+        <!-- Bottom button/indicator line -->
+        <line x1="400" y1="-200" x2="560" y2="-200" stroke-width="40"/>
+    </g>
+</svg>

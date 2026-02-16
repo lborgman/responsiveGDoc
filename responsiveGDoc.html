@@ -5,16 +5,21 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <title>G Doc - Mobile View</title>
+    <link rel="icon" type="image/svg" href="/img/logo2.svg">
+
     <!-- This page © Copyright 2026, Lennart Borgman -->
     <meta name="author" content="Lennart Borgman">
     <meta name="description" content="Add responsible CSS for Google Doc 'published to web'">
 
-    <meta property="og:url" content="https://some4i.eu/mm4i/mm4i.html">
+    <meta property="og:url" content="https://lborgman.github.io/responsiveGDoc/responsiveGDoc.html">
     <meta property="og:type" content="website">
+    <!--
     <meta property="og:image" content="https://some4i.eu/mm4i/img/mm4i.png">
     <meta property="og:image:alt" content="Example screenshot of mm4i">
     <meta property="og:image:width" content="404">
     <meta property="og:image:height" content="186">
+    -->
 
 
     <!-- OGDYN -->
@@ -72,6 +77,14 @@
         .invalid-url #elt-status {
             display: unset;
             color: var(--error);
+        }
+        .logo {
+            aspect-ratio: 1 / 1;
+            height: var(--logo-size, 48px);
+        }
+        #main-header {
+            display: flex;
+            gap: 20px;
         }
     </style>
     <style id="dark-light">
@@ -148,6 +161,7 @@
             font-size: 1rem !important;
         }
     </style>
+
     <script src="./init-error.js"></script>
     <script src="./importmaps.js"></script>
     <script>

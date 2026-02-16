@@ -18,7 +18,12 @@ const getOurUrl = () => initialSearchParams.get(paramUrlName);
 export async function mkPage() {
     const modFixer = await importFc4i("css-fixer");
 
-    const h2 = mkElt("h2", undefined, "Google Doc - mobile view web page");
+    const h2 = mkElt("h2", undefined, [
+        mkLogoImg(),
+        "G Doc - Mobile View"
+    ]);
+    h2.id = "main-header";
+
     const eltNotGoogle = mkElt("div", undefined, `
         This web page is not from Google!
         `);
@@ -173,11 +178,27 @@ export async function mkPage() {
             const spanButtons = mkElt("span", undefined, [
                 btnShare,
                 // btnAdd,
-                btnAdd2,
+                // btnAdd2,
             ]);
             spanButtons.id = "our-banner-span-buttons";
 
             ourBanner.appendChild(spanButtons);
+            {
+                const u = new URL(location);
+                u.search = "";
+                const urlHome = u.href;
+                console.log({ urlHome });
+                const imgLogo = mkLogoImg();
+                imgLogo.style = `
+                    aspect-ratio: 1 / 1;
+                    height: 32px;
+                    `;
+                const aLogo = mkElt("a", { href: urlHome }, imgLogo);
+                aLogo.title = "G Doc - mobile view";
+                ourBanner.insertBefore(aLogo, ourBanner.firstChild);
+            }
+
+
             btnShare.addEventListener("click", evt => {
                 evt.stopPropagation();
                 // debugger;
@@ -565,4 +586,12 @@ function removeHTMLTagsAndEntities(htmlString) {
     const doc = parser.parseFromString(`<div>${htmlString}</div>`, 'text/html');
     const textContent = doc.body.textContent || "";
     return textContent.trim();
+}
+
+function mkLogoImg(sizePx) {
+    const img = mkElt("img", {
+        src: "./img/logo2.svg",
+    });
+    img.classList.add("logo");
+    return img;
 }
