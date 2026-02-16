@@ -104,7 +104,14 @@ export async function mkPage() {
     ]);
 
     const realUrl = getOurUrl();
-    if (realUrl) inp.value = realUrl;
+    if (realUrl) {
+        inp.value = realUrl;
+        // FIX-ME: tell is search param on bad link
+        if (checkInp()) {
+            fetchAndRedisplay(realUrl);
+            return;
+        }
+    }
 
     inp.setAttribute("placeholder", "Link from Google Docs 'Publish to Web'");
     if (true) {
@@ -133,7 +140,7 @@ export async function mkPage() {
         inp.reportValidity();
         funInp();
     });
-    form.addEventListener("submit", evt => {
+    form.addEventListener("NOsubmit", evt => {
         evt.preventDefault();
         console.log("check submit");
         // debugger;
@@ -298,8 +305,9 @@ export async function mkPage() {
 
     function isValidUrl(url) {
         try {
-            new URL(url);
-            return true;
+            const u = new URL(url);
+            if (u.protocol === "https:") return true;
+            return false;
         } catch (e) {
             return false;
         }
@@ -335,6 +343,8 @@ export async function mkPage() {
             return;
         }
         if (!isValidUrl(url)) {
+            form.classList.add("invalid-url");
+            eltStatus.textContent = "Invalid link format";
             inp.setCustomValidity('MY Please enter a valid URL');
             inp.reportValidity();
             return;
@@ -357,6 +367,7 @@ export async function mkPage() {
         form.classList.remove("invalid-url");
         inp.setCustomValidity('');
         inp.reportValidity();
+        return true;
     }
 
     function debounce(func, waitMS = 200) {
