@@ -69,7 +69,7 @@
         #not-google {
             background: blue;
             color: white;
-            padding: 4px;
+            padding: 15px;
             border-radius: 8px;
             box-shadow: black 5px 5px 5px;
         }
@@ -82,10 +82,12 @@
             display: unset;
             color: var(--error);
         }
+
         .logo {
             aspect-ratio: 1 / 1;
             height: var(--logo-size, 48px);
         }
+
         #main-header {
             display: flex;
             gap: 20px;
@@ -143,16 +145,36 @@
             }
         }
 
-        #the-dialog {
-            background: red;
+        dialog {
             border: none;
             border-radius: 4px;
             box-shadow: black 10px 10px 10px;
+            max-width: 400px;
             padding: 0px;
+            background: blue;
         }
-        #the-dialog > div {
-            background: yellow;
+
+        dialog>div {
             padding: 1rem;
+        }
+
+        dialog::backdrop {
+            backdrop-filter: blur(2px);
+            background-color: #99999966;
+        }
+
+        #dialog-support>div {
+            background-color: goldenrod;
+            background-color: orange;
+        }
+
+
+        #the-dialog {
+            background: red;
+        }
+
+        #the-dialog>div {
+            background: yellow;
         }
 
         dialog#the-dialog::backdrop {

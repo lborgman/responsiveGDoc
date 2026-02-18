@@ -93,27 +93,29 @@ const cacheImportFc4i = new Map();
     const relImports = {
         "page": "./js/mod/page.js",
         "css-fixer": "./js/mod/css-fixer.js",
+        "support-us": "./js/mod/support-us.js",
+
         // "toast-ui-helpers": "./js/mod/toast-ui-helpers.js",
 
-        "images": "./js/mod/images.js",
-        "is-displayed": "./js/mod/is-displayed.js",
-        "local-settings": "./js/mod/local-settings.js",
-        "my-svg": "./js/mod/my-svg.js",
-        "sharing-params": "./src/js/mod/sharing-params.js",
-        "toolsJs": "./js/mod/tools.js",
-        "util-mdc": "./js/mod/util-mdc.js",
-        "woff-codepoints": "./js/mod/woff-codepoints.js",
-        "woff2-mdc-symbols": "./js/mod/woff2-mdc-symbols.js",
+        // "images": "./js/mod/images.js",
+        // "is-displayed": "./js/mod/is-displayed.js",
+        // "local-settings": "./js/mod/local-settings.js",
+        // "my-svg": "./js/mod/my-svg.js",
+        // "sharing-params": "./src/js/mod/sharing-params.js",
+        // "toolsJs": "./js/mod/tools.js",
+        // "util-mdc": "./js/mod/util-mdc.js",
+        // "woff-codepoints": "./js/mod/woff-codepoints.js",
+        // "woff2-mdc-symbols": "./js/mod/woff2-mdc-symbols.js",
 
         // Tests:
-        "no-ui-slider": "./ext/no-ui-slider/nouislider.mjs",
+        // "no-ui-slider": "./ext/no-ui-slider/nouislider.mjs",
         "qrcode": "https://cdn.jsdelivr.net/npm/qrcode-esm/+esm",
-        "qr-scanner": "https://cdn.jsdelivr.net/npm/qr-scanner@latest/qr-scanner.min.js",
+        // "qr-scanner": "https://cdn.jsdelivr.net/npm/qr-scanner@latest/qr-scanner.min.js",
 
-        "shield-click": "./js/mod/shield-click.js",
+        // "shield-click": "./js/mod/shield-click.js",
 
-        "hashids": "https://esm.sh/hashids@2.3.0",
-        "css-specificity": "https://cdn.jsdelivr.net/npm/@bramus/specificity",
+        // "hashids": "https://esm.sh/hashids@2.3.0",
+        // "css-specificity": "https://cdn.jsdelivr.net/npm/@bramus/specificity",
     };
 
     const isImporting = {};

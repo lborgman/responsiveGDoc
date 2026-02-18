@@ -24,9 +24,20 @@ export async function mkPage() {
     ]);
     h2.id = "main-header";
 
-    const eltNotGoogle = mkElt("div", undefined, `
-        This web page is not from Google!
-        `);
+    const eltNotGoogle = mkElt("div", undefined, [
+        mkElt("b", undefined, `This web page is not from Google!`),
+        mkElt("p", undefined, `
+                So if you see any problems please tell me.
+            `),
+        mkElt("p", undefined, [
+            `However I think it should have been from Google.
+             If you want to support me offering this web page you can do that here:
+            `
+        ]),
+        mkElt("div", undefined, [
+            mkElt("img", { src: "./img/qr-bmc.png", height: "100", width: "100" })
+        ]),
+    ]);
     eltNotGoogle.id = "not-google";
     const eltWhy = mkElt("div", undefined, `
         Google Docs is a free document editor.
