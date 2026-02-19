@@ -14,46 +14,104 @@ export async function popupSupport() {
         background-position: center;
         aspect-ratio: 1 / 1;
     `;
+    const divBMCimage = mkElt("div", undefined, eltBMCimage);
+    divBMCimage.style = `
+        padding: 10px;
+        background: white;
+        border-radius: 8px;
+    `;
     const eltBMC = mkElt("div", undefined, [
         mkElt("div", undefined, "Buy me a chocolate"),
-        eltBMCimage
+        divBMCimage
     ]);
     eltBMC.style = `
         display: flex;
         flex-direction: column;
         gap: 10px;
-        padding: 10px;
+        padding: 14px;
         background: chocolate;
         color: white;
-        border: 1px red;
-        NOwidth: 378px;
-        NOheight: 572px;
+        text-decoration: none;
+        border-radius: 12px;
+        NOborder: 1px red;
         aspect-ratio: 378 / 572;
     `;
     const aBMC = mkElt("a", { href: "https://buymeacoffee.com/mm4i", target: "_blank" }, eltBMC);
     aBMC.style.display = "flex";
     aBMC.style.fontSize = "1rem";
+    aBMC.id = "donate-bmc";
+
+    const eltSwish = mkElt("img", { src: "./img/swish-QR-20kr.png" });
+    eltSwish.id = "donate-swish";
 
 
-    const eltDonation = mkElt("p", undefined, [
-        aBMC,
-        mkElt("img", { src: "./img/swish-QR-20kr.png" })
+    const mkDonateChoice = (idDonate, label) => {
+        const inp = mkElt("input", { type: "radio", name: "donate-name", value: idDonate });
+        const lbl = mkElt("label", undefined, [inp, label]);
+        return lbl;
+    }
+    const eltDonateChoice = mkElt("div", undefined, [
+        mkDonateChoice("donate-bmc", "Buy me a chocolate"),
+        mkDonateChoice("donate-swish", "Swish"),
     ]);
-    eltDonation.id = "elt-donation";
-    eltDonation.style = `
+    eltDonateChoice.addEventListener("change", evt => {
+        evt.stopPropagation();
+        const newChoice = evt.target.value;
+        selectDonationChoice(newChoice);
+    });
+    eltDonateChoice.style = `
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    `;
+
+    const eltDonationAlts = mkElt("p", undefined, [
+        aBMC,
+        eltSwish,
+    ]);
+    eltDonationAlts.id = "elt-donation";
+    eltDonationAlts.style = `
         display: flex;
         justify-content: center;
         height: 250px;
         gap: 20px;
     `;
+
+    selectDonationChoice("donate-bmc");
+    eltDonateChoice.firstElementChild.querySelector("input").checked = true;
+
+    function selectDonationChoice(id) {
+        console.log(eltDonationAlts);
+        // debugger;
+        eltDonationAlts.childNodes.forEach(elt => {
+            if (elt.id == id) {
+                elt.style.display = "unset";
+            } else {
+                elt.style.display = "none";
+            }
+        })
+    }
+
+    const eltDonationOuter = mkElt("div", undefined, [eltDonateChoice, eltDonationAlts]);
+
+    const eltNotYet = mkElt("p", undefined, "Please do not donate yet!");
+    eltNotYet.style = `
+        background: red;
+        color: black;
+        font-size: 1.5rem;
+        padding: 8px;
+        border: 4px solid yellow;
+        border-radius: 8px;
+    `;
     const dialog = mkElt("dialog", undefined, [
         mkElt("div", undefined, [
+            eltNotYet,
             mkElt("h2", undefined, "A little support"),
             mkElt("p", undefined, `
-                We pay for some web services.
+                We pay for some web services each month.
                 A small donation for those will be welcome!
             `),
-            eltDonation
+            eltDonationOuter,
         ])
     ]);
     dialog.id = "dialog-support";

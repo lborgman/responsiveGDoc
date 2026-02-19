@@ -24,6 +24,54 @@ export async function mkPage() {
     ]);
     h2.id = "main-header";
 
+    const eltOpenSupport = mkElt("div");
+    eltOpenSupport.style = `
+        background: orange;
+        aspect-ratio: 1 / 1;
+        width: 70px;
+        mask-image: url(./img/donate.svg);
+        mask-repeat: no-repeat;
+        mask-size: cover;
+        mask-position: center;
+        color: black;
+
+    `;
+    eltOpenSupport.addEventListener("click", async evt => {
+        evt.stopPropagation();
+        const fromGitHub = (() => {
+            return false;
+            if (location.hostname != "localhost") return false;
+            debugger;
+            return confirm("Fetch module from GitHut?");
+            /*
+            <script type="module">
+                import { something } from 'https://cdn.jsdelivr.net/gh/user/repo@version/src/modern-file.js';
+                // or with branch instead of tag
+                // import { something } from 'https://cdn.jsdelivr.net/gh/user/repo@main/src/modern-file.js';
+            </script>
+            <script type="module">
+                import lodash from 'https://esm.sh/lodash@4';
+                import { myUtil } from 'https://esm.sh/gh/user/repo@1.2.3/src/utils.js';
+            </script>
+            */
+            // return false;
+        })();
+        const mod = await (() => {
+            if (!fromGitHub) {
+                return importFc4i("support-us");
+            }
+            // @ts-ignore
+            return import('https://cdn.jsdelivr.net/gh/lborgman/responsiveGDoc@main/js/mod/support-us.js');
+        })();
+        // (await importFc4i("support-us")).popupSupport();
+        mod.popupSupport();
+    });
+    const divOpenSupport = mkElt("p", undefined, eltOpenSupport);
+    divOpenSupport.style = `
+        display: flex;
+        justify-content: center;
+    `;
+
     const eltNotGoogle = mkElt("div", undefined, [
         mkElt("b", undefined, `This web page is not from Google!`),
         mkElt("p", undefined, `
@@ -31,14 +79,14 @@ export async function mkPage() {
             `),
         mkElt("p", undefined, [
             `However I think it should have been from Google.
-             If you want to support me offering this web page you can do that here:
+             If you want to donate to me to help me doing this click her:
             `
         ]),
-        mkElt("div", undefined, [
-            mkElt("img", { src: "./img/qr-bmc.png", height: "100", width: "100" })
-        ]),
+        divOpenSupport,
     ]);
     eltNotGoogle.id = "not-google";
+
+
     const eltWhy = mkElt("div", undefined, `
         Google Docs is a free document editor.
         You can publish a document as a (readonly) web page.
