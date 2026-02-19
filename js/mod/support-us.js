@@ -104,7 +104,7 @@ export async function popupSupport() {
         border-radius: 8px;
     `;
     const dialog = mkElt("dialog", undefined, [
-        mkElt("div", undefined, [
+        mkElt("div", { style: "background-color:green;" }, [
             eltNotYet,
             mkElt("h2", undefined, "A little support"),
             mkElt("p", undefined, `
