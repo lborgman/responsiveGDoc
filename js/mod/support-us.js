@@ -96,8 +96,8 @@ export async function popupSupport() {
 
     const eltNotYet = mkElt("p", undefined, "Please do not donate yet!");
     eltNotYet.style = `
-        background: red;
-        color: black;
+        background: yellow;
+        color: darkred;
         font-size: 1.5rem;
         padding: 8px;
         border: 4px solid yellow;

@@ -20,7 +20,7 @@ export async function mkPage() {
 
     const h2 = mkElt("h2", undefined, [
         mkLogoImg(),
-        "G Doc - Mobile View"
+        "Mobile View of Google Doc"
     ]);
     h2.id = "main-header";
 
@@ -260,7 +260,7 @@ export async function mkPage() {
                     height: 32px;
                     `;
                 const aLogo = mkElt("a", { href: urlHome }, imgLogo);
-                aLogo.title = "G Doc - mobile view";
+                aLogo.title = "Mobile View logo";
                 ourBanner.insertBefore(aLogo, ourBanner.firstChild);
             }
 
